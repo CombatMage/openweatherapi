@@ -17,7 +17,16 @@ func readAPIKey() string {
 }
 
 func TestDownloadWeatherData(t *testing.T) {
-	resp, err := DownloadWeatherData(readAPIKey(), cityBerlin)
+	// arrange
+	q := Query{
+		APIKey:   readAPIKey(),
+		Location: cityBerlin,
+	}
+
+	// action
+	resp, err := DownloadWeatherData(q)
+
+	// verify
 	if err != nil {
 		t.Error("error while retrieving data: " + err.Error())
 	} else if len(resp) == 0 {
