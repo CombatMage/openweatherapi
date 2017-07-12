@@ -8,9 +8,10 @@ import (
 
 // Query represents a pending request to openweathermap
 type Query struct {
-	APIKey   string
-	Location string
-	Unit     string
+	APIKey    string
+	Unit      string
+	Query     string
+	queryType string
 }
 
 type weatherAPI interface {
@@ -18,17 +19,17 @@ type weatherAPI interface {
 	Weather() (json string, err error)
 }
 
-// NewQuery creates a query for openweathermap
-func NewQuery(apiKey string, location string, unit ...string) Query {
+// NewQueryForCity creates a query for openweathermap
+func NewQueryForCity(apiKey string, city string, unit ...string) Query {
 	u := "metric"
 	if len(unit) > 0 {
 		u = unit[0]
 	}
-
 	return Query{
-		APIKey:   apiKey,
-		Location: location,
-		Unit:     u,
+		APIKey:    apiKey,
+		Query:     city,
+		queryType: "q",
+		Unit:      u,
 	}
 }
 
@@ -60,17 +61,17 @@ func downloadString(url string) (res string, err error) {
 func forecastURL(q Query) string {
 	url := fmt.Sprintf(
 		"http://api.openweathermap.org/data/2.5/forecast/daily"+
-			"?q=%s"+
+			"?%s=%s"+
 			"&appid=%s"+
-			"&units=%s", q.Location, q.APIKey, q.Unit)
+			"&units=%s", q.queryType, q.Query, q.APIKey, q.Unit)
 	return url
 }
 
 func weatherURL(q Query) string {
 	url := fmt.Sprintf(
 		"http://api.openweathermap.org/data/2.5/weather"+
-			"?q=%s"+
+			"?%s=%s"+
 			"&appid=%s"+
-			"&units=%s", q.Location, q.APIKey, q.Unit)
+			"&units=%s", q.queryType, q.Query, q.APIKey, q.Unit)
 	return url
 }

@@ -16,32 +16,32 @@ func readAPIKey() string {
 	return string(key)
 }
 
-func TestNewQuery(t *testing.T) {
+func TestNewQueryForCity(t *testing.T) {
 	// arrange
 	apiKeyFile := readAPIKey()
 	location := cityBerlin
 	unit := "imperial"
 
 	// action
-	q := NewQuery(apiKeyFile, location)
+	q := NewQueryForCity(apiKeyFile, location)
 
 	// verify
-	if q.APIKey != apiKeyFile || q.Location != location || q.Unit != "metric" {
+	if q.APIKey != apiKeyFile || q.Query != location || q.Unit != "metric" {
 		t.Error("query and query params do not match")
 	}
 
 	// action 2
-	q = NewQuery(apiKeyFile, location, unit)
+	q = NewQueryForCity(apiKeyFile, location, unit)
 
 	// verify 2
-	if q.APIKey != apiKeyFile || q.Location != location || q.Unit != unit {
+	if q.APIKey != apiKeyFile || q.Query != location || q.Unit != unit {
 		t.Error("query and query params do not match")
 	}
 }
 
 func TestForecast(t *testing.T) {
 	// arrange
-	q := NewQuery(readAPIKey(), cityBerlin)
+	q := NewQueryForCity(readAPIKey(), cityBerlin)
 
 	// action
 	resp, err := q.Forecast()
@@ -56,7 +56,7 @@ func TestForecast(t *testing.T) {
 
 func TestWeather(t *testing.T) {
 	// arrange
-	q := NewQuery(readAPIKey(), cityBerlin)
+	q := NewQueryForCity(readAPIKey(), cityBerlin)
 
 	// action
 	resp, err := q.Weather()
