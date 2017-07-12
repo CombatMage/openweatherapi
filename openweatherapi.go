@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strings"
 )
 
 // Query represents a pending request to openweathermap
@@ -61,6 +62,20 @@ func NewQueryForID(apiKey string, id string, unit ...string) Query {
 	}
 }
 
+// NewQueryForLocation creates a query for openweathermap from latitude and longitude
+func NewQueryForLocation(apiKey string, lat string, lon string, unit ...string) Query {
+	u := "metric"
+	if len(unit) > 0 {
+		u = unit[0]
+	}
+	return Query{
+		APIKey:    apiKey,
+		Query:     lat + "|" + lon,
+		queryType: "lat|lon",
+		Unit:      u,
+	}
+}
+
 // Weather downloads current weather data from
 // openweathermap and return them as string
 func (query Query) Weather() (json string, err error) {
@@ -95,9 +110,19 @@ func weatherURL(q Query) string {
 }
 
 func formatURLQuery(q Query) string {
-	params := fmt.Sprintf(
-		"?%s=%s"+
-			"&appid=%s"+
-			"&units=%s", q.queryType, q.Query, q.APIKey, q.Unit)
-	return params
+	queryType := q.queryType
+	queryValue := q.Query
+	var query string
+
+	if queryType == "lat|lon" {
+		params := strings.Split(queryValue, "|") // expected format is lat|long
+		lat := params[0]
+		lon := params[1]
+		query = fmt.Sprintf("?lat=%s&lon=%s", lat, lon)
+	} else {
+		query = fmt.Sprintf("?%s=%s", queryType, queryValue)
+	}
+
+	query = query + fmt.Sprintf("&appid=%s&units=%s", q.APIKey, q.Unit)
+	return query
 }
