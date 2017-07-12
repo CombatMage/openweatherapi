@@ -6,22 +6,46 @@ import (
 	"net/http"
 )
 
+// Query represents a pending request to openweathermap
 type Query struct {
 	APIKey   string
 	Location string
+	Unit     string
 }
 
-func forecastURL(q Query) string {
-	url := fmt.Sprintf(
-		"http://api.openweathermap.org/data/2.5/forecast/daily"+
-			"?q=%s&appid=%s&units=metric", q.Location, q.APIKey)
-	return url
+type weatherAPI interface {
+	Forecast() (json string, err error)
+	Weather() (json string, err error)
 }
 
-// DownloadWeatherData downloads forecast data from
+// NewQuery creates a query for openweathermap
+func NewQuery(apiKey string, location string, unit ...string) Query {
+	u := "metric"
+	if len(unit) > 0 {
+		u = unit[0]
+	}
+
+	return Query{
+		APIKey:   apiKey,
+		Location: location,
+		Unit:     u,
+	}
+}
+
+// Weather downloads current weather data from
 // openweathermap and return them as string
-func DownloadWeatherData(query Query) (json string, err error) {
-	resp, err := http.Get(forecastURL(query))
+func (query Query) Weather() (json string, err error) {
+	return downloadString(weatherURL(query))
+}
+
+// Forecast downloads forecast data from
+// openweathermap and return them as string
+func (query Query) Forecast() (json string, err error) {
+	return downloadString(forecastURL(query))
+}
+
+func downloadString(url string) (res string, err error) {
+	resp, err := http.Get(url)
 	if err != nil {
 		return "", err
 	}
@@ -31,4 +55,22 @@ func DownloadWeatherData(query Query) (json string, err error) {
 		return "", err
 	}
 	return string(body), nil
+}
+
+func forecastURL(q Query) string {
+	url := fmt.Sprintf(
+		"http://api.openweathermap.org/data/2.5/forecast/daily"+
+			"?q=%s"+
+			"&appid=%s"+
+			"&units=%s", q.Location, q.APIKey, q.Unit)
+	return url
+}
+
+func weatherURL(q Query) string {
+	url := fmt.Sprintf(
+		"http://api.openweathermap.org/data/2.5/weather"+
+			"?q=%s"+
+			"&appid=%s"+
+			"&units=%s", q.Location, q.APIKey, q.Unit)
+	return url
 }
