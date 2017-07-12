@@ -19,7 +19,7 @@ type weatherAPI interface {
 	Weather() (json string, err error)
 }
 
-// NewQueryForCity creates a query for openweathermap
+// NewQueryForCity creates a query for openweathermap from city name
 func NewQueryForCity(apiKey string, city string, unit ...string) Query {
 	u := "metric"
 	if len(unit) > 0 {
@@ -29,6 +29,34 @@ func NewQueryForCity(apiKey string, city string, unit ...string) Query {
 		APIKey:    apiKey,
 		Query:     city,
 		queryType: "q",
+		Unit:      u,
+	}
+}
+
+// NewQueryForZip creates a query for openweathermap from zip code
+func NewQueryForZip(apiKey string, zip string, unit ...string) Query {
+	u := "metric"
+	if len(unit) > 0 {
+		u = unit[0]
+	}
+	return Query{
+		APIKey:    apiKey,
+		Query:     zip,
+		queryType: "zip",
+		Unit:      u,
+	}
+}
+
+// NewQueryForID creates a query for openweathermap from city id
+func NewQueryForID(apiKey string, id string, unit ...string) Query {
+	u := "metric"
+	if len(unit) > 0 {
+		u = unit[0]
+	}
+	return Query{
+		APIKey:    apiKey,
+		Query:     id,
+		queryType: "id",
 		Unit:      u,
 	}
 }
@@ -59,19 +87,17 @@ func downloadString(url string) (res string, err error) {
 }
 
 func forecastURL(q Query) string {
-	url := fmt.Sprintf(
-		"http://api.openweathermap.org/data/2.5/forecast/daily"+
-			"?%s=%s"+
-			"&appid=%s"+
-			"&units=%s", q.queryType, q.Query, q.APIKey, q.Unit)
-	return url
+	return "http://api.openweathermap.org/data/2.5/forecast/daily" + formatURLQuery(q)
 }
 
 func weatherURL(q Query) string {
-	url := fmt.Sprintf(
-		"http://api.openweathermap.org/data/2.5/weather"+
-			"?%s=%s"+
+	return "http://api.openweathermap.org/data/2.5/weather" + formatURLQuery(q)
+}
+
+func formatURLQuery(q Query) string {
+	params := fmt.Sprintf(
+		"?%s=%s"+
 			"&appid=%s"+
 			"&units=%s", q.queryType, q.Query, q.APIKey, q.Unit)
-	return url
+	return params
 }
