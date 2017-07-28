@@ -132,7 +132,7 @@ func (query Query) WeatherRaw() (json string, err error) {
 func (query Query) Weather() (data CurrentWeatherData, err error) {
 	bytes, err := download(weatherURL(query))
 	if err != nil {
-		return CurrentWeatherData{}, nil
+		return CurrentWeatherData{}, err
 	}
 
 	data = CurrentWeatherData{}
