@@ -39,12 +39,27 @@ func TestNewQueryForCity(t *testing.T) {
 	}
 }
 
-func TestForecast(t *testing.T) {
+func TestForecastRaw(t *testing.T) {
 	// arrange
 	q := NewQueryForCity(readAPIKey(), cityBerlin)
 
 	// action
-	resp, err := q.Forecast()
+	resp, err := q.ForecastRaw()
+
+	// verify
+	if err != nil {
+		t.Error("error while retrieving data: " + err.Error())
+	} else if len(resp) == 0 {
+		t.Error("received data is empty")
+	}
+}
+
+func TestWeatherRaw(t *testing.T) {
+	// arrange
+	q := NewQueryForCity(readAPIKey(), cityBerlin)
+
+	// action
+	resp, err := q.WeatherRaw()
 
 	// verify
 	if err != nil {
@@ -59,12 +74,12 @@ func TestWeather(t *testing.T) {
 	q := NewQueryForCity(readAPIKey(), cityBerlin)
 
 	// action
-	resp, err := q.Weather()
+	data, err := q.Weather()
 
 	// verify
 	if err != nil {
 		t.Error("error while retrieving data: " + err.Error())
-	} else if len(resp) == 0 {
-		t.Error("received data is empty")
+	} else if data.ID != 2950159 { // id of berlin
+		t.Error("received data is invalid")
 	}
 }
