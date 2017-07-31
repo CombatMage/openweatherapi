@@ -16,9 +16,9 @@ type Query struct {
 	queryType string
 }
 
-// CurrentWeatherData represents unmarshalled data from openweathermap
+// CurrentWeather represents unmarshalled data from openweathermap
 // for the current weather
-type CurrentWeatherData struct {
+type CurrentWeather struct {
 	Coord struct {
 		Lon float64 `json:"lon"`
 		Lat float64 `json:"lat"`
@@ -59,6 +59,32 @@ type CurrentWeatherData struct {
 	ID   int    `json:"id"`
 	Name string `json:"name"`
 	Cod  int    `json:"cod"`
+}
+
+// DailyForecast represents unmarshalled data from openweathermap
+// for the daily forecast
+type DailyForecast []struct {
+	Dt   int `json:"dt"`
+	Temp struct {
+		Day   float64 `json:"day"`
+		Min   float64 `json:"min"`
+		Max   float64 `json:"max"`
+		Night float64 `json:"night"`
+		Eve   float64 `json:"eve"`
+		Morn  float64 `json:"morn"`
+	} `json:"temp"`
+	Pressure float64 `json:"pressure"`
+	Humidity int     `json:"humidity"`
+	Weather  []struct {
+		ID          int    `json:"id"`
+		Main        string `json:"main"`
+		Description string `json:"description"`
+		Icon        string `json:"icon"`
+	} `json:"weather"`
+	Speed  float64 `json:"speed"`
+	Deg    int     `json:"deg"`
+	Clouds int     `json:"clouds"`
+	Snow   float64 `json:"snow,omitempty"`
 }
 
 // NewQueryForCity creates a query for openweathermap from city name
@@ -129,25 +155,37 @@ func (query Query) WeatherRaw() (json string, err error) {
 
 // Weather downloads current weather data from
 // openweathermap and return them as WeatherData
-func (query Query) Weather() (data CurrentWeatherData, err error) {
+func (query Query) Weather() (data CurrentWeather, err error) {
 	bytes, err := download(weatherURL(query))
 	if err != nil {
-		return CurrentWeatherData{}, err
+		return CurrentWeather{}, err
 	}
 
-	data = CurrentWeatherData{}
+	data = CurrentWeather{}
 	err = json.Unmarshal(bytes, &data)
 	return data, err
 }
 
-// ForecastRaw downloads forecast data from
+// DailyForecastRaw downloads forecast data from
 // openweathermap and return them as string
-func (query Query) ForecastRaw() (json string, err error) {
-	bytes, err := download(forecastURL(query))
+func (query Query) DailyForecastRaw() (json string, err error) {
+	bytes, err := download(dailyForecastURL(query))
 	if err != nil {
 		return "", err
 	}
 	return string(bytes), nil
+}
+
+// DailyForecast downloads forecast data from
+// openweathermap and return them asDailyForecast
+func (query Query) DailyForecast() (data DailyForecast, err error) {
+	bytes, err := download(dailyForecastURL(query))
+	if err != nil {
+		return DailyForecast{}, err
+	}
+	data = DailyForecast{}
+	err = json.Unmarshal(bytes, &data)
+	return data, err
 }
 
 func download(url string) (res []byte, err error) {
@@ -163,7 +201,7 @@ func download(url string) (res []byte, err error) {
 	return body, nil
 }
 
-func forecastURL(q Query) string {
+func dailyForecastURL(q Query) string {
 	return "http://api.openweathermap.org/data/2.5/forecast/daily" + formatURLQuery(q)
 }
 

@@ -44,7 +44,7 @@ func TestForecastRaw(t *testing.T) {
 	q := NewQueryForCity(readAPIKey(), cityBerlin)
 
 	// action
-	resp, err := q.ForecastRaw()
+	resp, err := q.DailyForecastRaw()
 
 	// verify
 	if err != nil {
