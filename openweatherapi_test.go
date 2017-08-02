@@ -79,7 +79,22 @@ func TestWeather(t *testing.T) {
 	// verify
 	if err != nil {
 		t.Error("error while retrieving data: " + err.Error())
-	} else if data.ID != 2950159 { // id of berlin
+	} else if data.Name != "Berlin" { // id of berlin
+		t.Error("received data is invalid")
+	}
+}
+
+func TestDailyForecast(t *testing.T) {
+	// arrange
+	q := NewQueryForCity(readAPIKey(), cityBerlin)
+
+	// action
+	data, err := q.DailyForecast()
+
+	// verify
+	if err != nil {
+		t.Error("error while retrieving data: " + err.Error())
+	} else if data.City.Name != "Berlin" {
 		t.Error("received data is invalid")
 	}
 }
