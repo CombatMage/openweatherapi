@@ -216,6 +216,12 @@ func download(url string) (res []byte, err error) {
 	return body, nil
 }
 
+// WeatherIconURL returns an url to download matching icon for
+// given weather id
+func WeatherIconURL(iconID string) (url string) {
+	return "http://openweathermap.org/img/w/" + iconID
+}
+
 func dailyForecastURL(q Query) string {
 	return "http://api.openweathermap.org/data/2.5/forecast/daily" + formatURLQuery(q)
 }
