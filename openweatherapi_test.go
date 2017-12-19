@@ -3,98 +3,79 @@ package openweatherapi
 import (
 	"io/ioutil"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
-const apiKeyFile = "openweather.key"
+const apiKeyFile = "api.key"
 const cityBerlin = "Berlin,de"
 
 func readAPIKey() string {
 	key, err := ioutil.ReadFile(apiKeyFile)
 	if err != nil {
-		panic("cannot run test, you must provide openweathermap api key")
+		panic(`cannot run test, you must provide openweathermap api key. 
+			See https://home.openweathermap.org/users/sign_up`)
 	}
 	return string(key)
 }
 
 func TestNewQueryForCity(t *testing.T) {
 	// arrange
-	apiKeyFile := readAPIKey()
+	apiKey := readAPIKey()
 	location := cityBerlin
-	unit := "imperial"
-
 	// action
-	q := NewQueryForCity(apiKeyFile, location)
-
+	q := NewQueryForCity(apiKey, location)
 	// verify
-	if q.APIKey != apiKeyFile || q.Query != location || q.Unit != "metric" {
-		t.Error("query and query params do not match")
-	}
+	assert.Equal(t, apiKey, q.APIKey)
+	assert.Equal(t, location, q.Query)
+	assert.Equal(t, "metric", q.Unit)
 
-	// action 2
-	q = NewQueryForCity(apiKeyFile, location, unit)
-
-	// verify 2
-	if q.APIKey != apiKeyFile || q.Query != location || q.Unit != unit {
-		t.Error("query and query params do not match")
-	}
+	// arrange
+	unit := "imperial"
+	// action
+	q = NewQueryForCity(apiKey, location, unit)
+	// verify
+	assert.Equal(t, apiKey, q.APIKey)
+	assert.Equal(t, location, q.Query)
+	assert.Equal(t, unit, q.Unit)
 }
 
 func TestForecastRaw(t *testing.T) {
 	// arrange
 	q := NewQueryForCity(readAPIKey(), cityBerlin)
-
 	// action
 	resp, err := q.DailyForecastRaw()
-
 	// verify
-	if err != nil {
-		t.Error("error while retrieving data: " + err.Error())
-	} else if len(resp) == 0 {
-		t.Error("received data is empty")
-	}
+	assert.NoError(t, err)
+	assert.True(t, len(resp) > 0)
 }
 
 func TestWeatherRaw(t *testing.T) {
 	// arrange
 	q := NewQueryForCity(readAPIKey(), cityBerlin)
-
 	// action
 	resp, err := q.WeatherRaw()
-
 	// verify
-	if err != nil {
-		t.Error("error while retrieving data: " + err.Error())
-	} else if len(resp) == 0 {
-		t.Error("received data is empty")
-	}
+	assert.NoError(t, err)
+	assert.True(t, len(resp) > 0)
 }
 
 func TestWeather(t *testing.T) {
 	// arrange
 	q := NewQueryForCity(readAPIKey(), cityBerlin)
-
 	// action
 	data, err := q.Weather()
-
 	// verify
-	if err != nil {
-		t.Error("error while retrieving data: " + err.Error())
-	} else if data.Name != "Berlin" { // id of berlin
-		t.Error("received data is invalid")
-	}
+	assert.NoError(t, err)
+	assert.Equal(t, "Berlin", data.Name)
 }
 
 func TestDailyForecast(t *testing.T) {
 	// arrange
 	q := NewQueryForCity(readAPIKey(), cityBerlin)
-
 	// action
 	data, err := q.DailyForecast()
-
 	// verify
-	if err != nil {
-		t.Error("error while retrieving data: " + err.Error())
-	} else if data.City.Name != "Berlin" {
-		t.Error("received data is invalid")
-	}
+	assert.NoError(t, err)
+	assert.Equal(t, "Berlin", data.City.Name)
 }
