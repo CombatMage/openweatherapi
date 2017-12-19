@@ -7,6 +7,7 @@ This Repo contains golang library to query OpenWetherMaps (http://openweathermap
 
 ## Example usage:
 
+Consuming the library:
 ```go
 // create a query
 q := NewQueryForCity(readAPIKey(), "Berlin,de")
@@ -21,3 +22,8 @@ fmt.Println(resp.Main.Temp) // 1
 ```
 
 See the test files for more example.
+
+A simple client for testing is also included:
+```bash
+openweatherclient.exe -key 42 -city Berlin,de
+```
