@@ -1,3 +1,7 @@
+// Package openweatherapi contains helper functions to query 
+// OpenWeatherMaps (http://openweathermap.org/) for weather information.
+// Currently the current weather API (http://openweathermap.org/current) and the 
+// 5 days forecast API (http://openweathermap.org/forecast5) are supported.
 package openweatherapi
 
 import (
@@ -8,7 +12,7 @@ import (
 	"strings"
 )
 
-// Query represents a pending request to openweathermap
+// Query represents a pending request to openweathermap.
 type Query struct {
 	APIKey    string
 	Unit      string
@@ -17,7 +21,7 @@ type Query struct {
 }
 
 // CurrentWeather represents unmarshalled data from openweathermap
-// for the current weather
+// for the current weather API (http://openweathermap.org/current).
 type CurrentWeather struct {
 	Coord struct {
 		Lon float64 `json:"lon"`
@@ -62,7 +66,7 @@ type CurrentWeather struct {
 }
 
 // DailyForecast represents unmarshalled data from openweathermap
-// for the daily forecast
+// for the 5 days forecast weather API (http://openweathermap.org/forecast5).
 type DailyForecast struct {
 	Cod     string  `json:"cod"`
 	Message float64 `json:"message"`
@@ -102,7 +106,8 @@ type DailyForecast struct {
 	} `json:"list"`
 }
 
-// NewQueryForCity creates a query for openweathermap from city name
+// NewQueryForCity creates a query for openweathermap from city name.
+// The unit is optional and defaults to metric.
 func NewQueryForCity(apiKey string, city string, unit ...string) Query {
 	u := "metric"
 	if len(unit) > 0 {
@@ -116,7 +121,8 @@ func NewQueryForCity(apiKey string, city string, unit ...string) Query {
 	}
 }
 
-// NewQueryForZip creates a query for openweathermap from zip code
+// NewQueryForZip creates a query for openweathermap from zip code.
+// The unit is optional and defaults to metric.
 func NewQueryForZip(apiKey string, zip string, unit ...string) Query {
 	u := "metric"
 	if len(unit) > 0 {
@@ -130,7 +136,8 @@ func NewQueryForZip(apiKey string, zip string, unit ...string) Query {
 	}
 }
 
-// NewQueryForID creates a query for openweathermap from city id
+// NewQueryForID creates a query for openweathermap from city id.
+// The unit is optional and defaults to metric.
 func NewQueryForID(apiKey string, id string, unit ...string) Query {
 	u := "metric"
 	if len(unit) > 0 {
@@ -144,7 +151,8 @@ func NewQueryForID(apiKey string, id string, unit ...string) Query {
 	}
 }
 
-// NewQueryForLocation creates a query for openweathermap from latitude and longitude
+// NewQueryForLocation creates a query for openweathermap from latitude and longitude.
+// The unit is optional and defaults to metric.
 func NewQueryForLocation(apiKey string, lat string, lon string, unit ...string) Query {
 	u := "metric"
 	if len(unit) > 0 {
@@ -158,8 +166,7 @@ func NewQueryForLocation(apiKey string, lat string, lon string, unit ...string) 
 	}
 }
 
-// WeatherRaw downloads current weather data from
-// openweathermap and return them as string
+// WeatherRaw downloads current weather data from openweathermap and return them as string.
 func (query Query) WeatherRaw() (json string, err error) {
 	bytes, err := download(weatherURL(query))
 	if err != nil {
@@ -168,8 +175,7 @@ func (query Query) WeatherRaw() (json string, err error) {
 	return string(bytes), nil
 }
 
-// Weather downloads current weather data from
-// openweathermap and return them as WeatherData
+// Weather downloads current weather data from openweathermap and return them as WeatherData.
 func (query Query) Weather() (data CurrentWeather, err error) {
 	bytes, err := download(weatherURL(query))
 	if err != nil {
@@ -181,8 +187,7 @@ func (query Query) Weather() (data CurrentWeather, err error) {
 	return data, err
 }
 
-// DailyForecastRaw downloads forecast data from
-// openweathermap and return them as string
+// DailyForecastRaw downloads 5 days forecast data from openweathermap and return them as string.
 func (query Query) DailyForecastRaw() (json string, err error) {
 	bytes, err := download(dailyForecastURL(query))
 	if err != nil {
@@ -191,8 +196,7 @@ func (query Query) DailyForecastRaw() (json string, err error) {
 	return string(bytes), nil
 }
 
-// DailyForecast downloads forecast data from
-// openweathermap and return them asDailyForecast
+// DailyForecast downloads 5 days forecast data from openweathermap and return them as DailyForecast.
 func (query Query) DailyForecast() (data DailyForecast, err error) {
 	bytes, err := download(dailyForecastURL(query))
 	if err != nil {
