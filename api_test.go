@@ -23,7 +23,7 @@ func TestForecastRaw(t *testing.T) {
 	// arrange
 	q := NewQueryForCity(readAPIKey(), cityBerlin)
 	// action
-	resp, err := q.DailyForecastRaw()
+	resp, err := q.DailyForecast5Raw()
 	// verify
 	assert.NoError(t, err)
 	assert.True(t, len(resp) > 0)
@@ -53,7 +53,7 @@ func TestDailyForecast(t *testing.T) {
 	// arrange
 	q := NewQueryForCity(readAPIKey(), cityBerlin)
 	// action
-	data, err := q.DailyForecast()
+	data, err := q.DailyForecast5()
 	// verify
 	assert.NoError(t, err)
 	assert.Equal(t, "Berlin", data.City.Name)

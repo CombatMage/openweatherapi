@@ -8,6 +8,11 @@ type Query struct {
 	queryType string
 }
 
+const queryTypeCity = "q"
+const queryTypeZip = "zip"
+const queryTypeID = "id"
+const queryTypeGeo = "lat|lon"
+
 // NewQueryForCity creates a query for openweathermap from city name.
 // The unit is optional and defaults to metric.
 func NewQueryForCity(apiKey string, city string, unit ...string) Query {
@@ -18,7 +23,7 @@ func NewQueryForCity(apiKey string, city string, unit ...string) Query {
 	return Query{
 		APIKey:    apiKey,
 		Query:     city,
-		queryType: "q",
+		queryType: queryTypeCity,
 		Unit:      u,
 	}
 }
@@ -33,7 +38,7 @@ func NewQueryForZip(apiKey string, zip string, unit ...string) Query {
 	return Query{
 		APIKey:    apiKey,
 		Query:     zip,
-		queryType: "zip",
+		queryType: queryTypeZip,
 		Unit:      u,
 	}
 }
@@ -48,7 +53,7 @@ func NewQueryForID(apiKey string, id string, unit ...string) Query {
 	return Query{
 		APIKey:    apiKey,
 		Query:     id,
-		queryType: "id",
+		queryType: queryTypeID,
 		Unit:      u,
 	}
 }
@@ -63,7 +68,7 @@ func NewQueryForLocation(apiKey string, lat string, lon string, unit ...string) 
 	return Query{
 		APIKey:    apiKey,
 		Query:     lat + "|" + lon,
-		queryType: "lat|lon",
+		queryType: queryTypeGeo,
 		Unit:      u,
 	}
 }

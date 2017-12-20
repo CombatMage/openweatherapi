@@ -45,9 +45,9 @@ type CurrentWeather struct {
 	Cod  int    `json:"cod"`
 }
 
-// DailyForecast represents unmarshalled data from openweathermap
+// DailyForecast5 represents unmarshalled data from openweathermap
 // for the 5 days forecast weather API (http://openweathermap.org/forecast5).
-type DailyForecast struct {
+type DailyForecast5 struct {
 	Cod     string  `json:"cod"`
 	Message float64 `json:"message"`
 	City    struct {
@@ -83,5 +83,41 @@ type DailyForecast struct {
 		Deg    int     `json:"deg"`
 		Clouds int     `json:"clouds"`
 		Snow   float64 `json:"snow,omitempty"`
+	} `json:"list"`
+}
+
+// DailyForecast16 represents unmarshalled data from openweathermap
+// for the 16 days forecast weather API (http://openweathermap.org/forecast16).
+type DailyForecast16 struct {
+	Cod     string  `json:"cod"`
+	Message float64 `json:"message"`
+	City    struct {
+		ID    int    `json:"id"`
+		Name  string `json:"name"`
+		Coord struct {
+			Lon float64 `json:"lon"`
+			Lat float64 `json:"lat"`
+		} `json:"coord"`
+		Country string `json:"country"`
+	} `json:"city"`
+	Cnt  int `json:"cnt"`
+	List []struct {
+		Dt   int `json:"dt"`
+		Temp struct {
+			Day   float64 `json:"day"`
+			Min   float64 `json:"min"`
+			Max   float64 `json:"max"`
+			Night float64 `json:"night"`
+			Eve   float64 `json:"eve"`
+			Morn  float64 `json:"morn"`
+		} `json:"temp"`
+		Pressure float64 `json:"pressure"`
+		Humidity int     `json:"humidity"`
+		Weather  []struct {
+			ID          int    `json:"id"`
+			Main        string `json:"main"`
+			Description string `json:"description"`
+			Icon        string `json:"icon"`
+		} `json:"weather"`
 	} `json:"list"`
 }
