@@ -22,15 +22,15 @@ func (query Query) WeatherRaw() (json string, err error) {
 }
 
 // Weather downloads current weather data from openweathermap and return them as WeatherData.
-func (query Query) Weather() (data CurrentWeather, err error) {
+func (query Query) Weather() (*CurrentWeather, error) {
 	bytes, err := download(WeatherURL(query))
 	if err != nil {
-		return CurrentWeather{}, err
+		return nil, err
 	}
 
-	data = CurrentWeather{}
-	err = json.Unmarshal(bytes, &data)
-	return data, err
+	dataPtr := &CurrentWeather{}
+	err = json.Unmarshal(bytes, dataPtr)
+	return dataPtr, err
 }
 
 // DailyForecast5Raw downloads 5 days forecast data from openweathermap and return them as string.
@@ -43,14 +43,14 @@ func (query Query) DailyForecast5Raw() (json string, err error) {
 }
 
 // DailyForecast5 downloads 5 days forecast data from openweathermap and return them as DailyForecast5.
-func (query Query) DailyForecast5() (data DailyForecast5, err error) {
+func (query Query) DailyForecast5() (*DailyForecast5, error) {
 	bytes, err := download(DailyForecast5URL(query))
 	if err != nil {
-		return DailyForecast5{}, err
+		return nil, err
 	}
-	data = DailyForecast5{}
-	err = json.Unmarshal(bytes, &data)
-	return data, err
+	dataPtr := &DailyForecast5{}
+	err = json.Unmarshal(bytes, dataPtr)
+	return dataPtr, err
 }
 
 // DailyForecast16Raw downloads 16 days forecast data from openweathermap and return them as string.
@@ -65,14 +65,14 @@ func (query Query) DailyForecast16Raw() (json string, err error) {
 
 // DailyForecast16 downloads 16 days forecast data from openweathermap and return them as DailyForecast16.
 // Warning: the 16 days forecast requires a paid account.
-func (query Query) DailyForecast16() (data DailyForecast16, err error) {
+func (query Query) DailyForecast16() (*DailyForecast16, error) {
 	bytes, err := download(DailyForecast16URL(query))
 	if err != nil {
-		return DailyForecast16{}, err
+		return nil, err
 	}
-	data = DailyForecast16{}
-	err = json.Unmarshal(bytes, &data)
-	return data, err
+	dataPtr := &DailyForecast16{}
+	err = json.Unmarshal(bytes, dataPtr)
+	return dataPtr, err
 }
 
 func download(url string) (res []byte, err error) {
