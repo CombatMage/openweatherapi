@@ -19,27 +19,6 @@ func readAPIKey() string {
 	return string(key)
 }
 
-func TestNewQueryForCity(t *testing.T) {
-	// arrange
-	apiKey := readAPIKey()
-	location := cityBerlin
-	// action
-	q := NewQueryForCity(apiKey, location)
-	// verify
-	assert.Equal(t, apiKey, q.APIKey)
-	assert.Equal(t, location, q.Query)
-	assert.Equal(t, "metric", q.Unit)
-
-	// arrange
-	unit := "imperial"
-	// action
-	q = NewQueryForCity(apiKey, location, unit)
-	// verify
-	assert.Equal(t, apiKey, q.APIKey)
-	assert.Equal(t, location, q.Query)
-	assert.Equal(t, unit, q.Unit)
-}
-
 func TestForecastRaw(t *testing.T) {
 	// arrange
 	q := NewQueryForCity(readAPIKey(), cityBerlin)
