@@ -13,8 +13,12 @@ const cityBerlin = "Berlin,de"
 func readAPIKey() string {
 	key, err := ioutil.ReadFile(apiKeyFile)
 	if err != nil {
-		panic(`cannot run test, you must provide openweathermap api key. 
-			See https://home.openweathermap.org/users/sign_up`)
+		panic(`
+			Cannot run test, you must provide openweathermap api key. 
+			Expected api.key file in src dir.
+
+			See https://home.openweathermap.org/users/sign_up
+			for information how to obtain a key`)
 	}
 	return string(key)
 }
