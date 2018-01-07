@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-const apiKeyFile = "api.key"
+const apiKeyFile = "testdata/api.key"
 const cityBerlin = "Berlin,de"
 
 func readAPIKey() string {
@@ -15,7 +15,7 @@ func readAPIKey() string {
 	if err != nil {
 		panic(`
 			Cannot run test, you must provide openweathermap api key. 
-			Expected api.key file in src dir.
+			Expected: testdata/api.key
 
 			See https://home.openweathermap.org/users/sign_up
 			for information how to obtain a key`)
