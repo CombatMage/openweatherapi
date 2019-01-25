@@ -9,14 +9,14 @@ This Repo contains golang library to query OpenWetherMaps (http://openweathermap
 
 
 ```sh
- $ go get github.com/CombatMage/openweatherapi
+ $ go get github.com/EricNeid/openweatherapi
 ```
 
 ## Documentation
 
 Is available on ``godoc``:
 
- https://godoc.org/github.com/CombatMage/openweatherapi
+ https://godoc.org/github.com/EricNeid/openweatherapi
 
 ## Examples
 
