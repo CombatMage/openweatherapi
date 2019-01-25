@@ -1,4 +1,4 @@
-module github.com/CombatMage/openweatherapi
+module github.com/EricNeid/openweatherapi
 
 require (
 	github.com/davecgh/go-spew v1.1.0
