@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/CombatMage/openweatherapi"
+	"github.com/EricNeid/openweatherapi"
 )
 
 func main() {
