@@ -8,31 +8,31 @@ This Repo contains golang library to query OpenWetherMaps (<http://openweatherma
 ## Install
 
 ```bash
-go get github.com/EricNeid/openweatherapi
+go get github.com/EricNeid/openweather
 ```
 
 ## Documentation
 
 Is available on ``godoc``:
 
-<https://godoc.org/github.com/EricNeid/openweatherapi>
+<https://godoc.org/github.com/EricNeid/openweather>
 
 ## Examples
 
 Consuming the library:
 
 ```go
-import "github.com/EricNeid/openweatherapi"
+import "github.com/EricNeid/openweather"
 
 // create a query
-q := NewQueryForCity(readAPIKey(), "Berlin,de")
+q := openweather.NewQueryForCity(readAPIKey(), "Berlin,de")
 
 // obtain data
 resp, err := q.Weather()
 
 // enjoy
 fmt.Println(resp.Name) // Berlin
-fmt.Println(resp.Weather[0].Description) // mis
+fmt.Println(resp.Weather[0].Description) // misc
 fmt.Println(resp.Main.Temp) // 1
 ```
 
