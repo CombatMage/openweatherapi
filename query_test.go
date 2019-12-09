@@ -1,9 +1,9 @@
-package openweatherapi
+package openweather
 
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/EricNeid/openweather/internal/test"
 )
 
 func TestNewQueryForCity(t *testing.T) {
@@ -13,17 +13,17 @@ func TestNewQueryForCity(t *testing.T) {
 	// action
 	q := NewQueryForCity(apiKey, location)
 	// verify
-	assert.Equal(t, apiKey, q.APIKey)
-	assert.Equal(t, location, q.Query)
-	assert.Equal(t, "metric", q.Unit)
-	assert.Equal(t, queryTypeCity, q.queryType)
+	test.Equals(t, apiKey, q.APIKey)
+	test.Equals(t, location, q.Query)
+	test.Equals(t, "metric", q.Unit)
+	test.Equals(t, queryTypeCity, q.queryType)
 
 	// arrange
 	unit := "imperial"
 	// action
 	q = NewQueryForCity(apiKey, location, unit)
 	// verify
-	assert.Equal(t, unit, q.Unit)
+	test.Equals(t, unit, q.Unit)
 }
 
 func TestNewQueryForZip(t *testing.T) {
@@ -33,9 +33,9 @@ func TestNewQueryForZip(t *testing.T) {
 	// action
 	q := NewQueryForZip(apiKey, zip)
 	// verify
-	assert.Equal(t, apiKey, q.APIKey)
-	assert.Equal(t, zip, q.Query)
-	assert.Equal(t, queryTypeZip, q.queryType)
+	test.Equals(t, apiKey, q.APIKey)
+	test.Equals(t, zip, q.Query)
+	test.Equals(t, queryTypeZip, q.queryType)
 }
 
 func TestNewQueryForID(t *testing.T) {
@@ -45,9 +45,9 @@ func TestNewQueryForID(t *testing.T) {
 	// action
 	q := NewQueryForID(apiKey, id)
 	// verify
-	assert.Equal(t, apiKey, q.APIKey)
-	assert.Equal(t, id, q.Query)
-	assert.Equal(t, queryTypeID, q.queryType)
+	test.Equals(t, apiKey, q.APIKey)
+	test.Equals(t, id, q.Query)
+	test.Equals(t, queryTypeID, q.queryType)
 }
 
 func TestNewQueryForLocation(t *testing.T) {
@@ -58,7 +58,7 @@ func TestNewQueryForLocation(t *testing.T) {
 	// action
 	q := NewQueryForLocation(apiKey, lat, lon)
 	// verify
-	assert.Equal(t, apiKey, q.APIKey)
-	assert.Equal(t, lat+"|"+lon, q.Query)
-	assert.Equal(t, queryTypeGeo, q.queryType)
+	test.Equals(t, apiKey, q.APIKey)
+	test.Equals(t, lat+"|"+lon, q.Query)
+	test.Equals(t, queryTypeGeo, q.queryType)
 }

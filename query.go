@@ -1,4 +1,4 @@
-package openweatherapi
+package openweather
 
 // Query represents a pending request to openweathermap.
 type Query struct {

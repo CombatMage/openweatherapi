@@ -1,10 +1,10 @@
-package openweatherapi
+package openweather
 
 import (
 	"io/ioutil"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/EricNeid/openweather/internal/test"
 )
 
 const apiKeyFile = "testdata/api.key"
@@ -29,8 +29,8 @@ func TestForecastRaw(t *testing.T) {
 	// action
 	resp, err := q.DailyForecast5Raw()
 	// verify
-	assert.NoError(t, err)
-	assert.True(t, len(resp) > 0)
+	test.Ok(t, err)
+	test.Assert(t, len(resp) > 0, "Received empty response")
 }
 
 func TestWeatherRaw(t *testing.T) {
@@ -39,8 +39,8 @@ func TestWeatherRaw(t *testing.T) {
 	// action
 	resp, err := q.WeatherRaw()
 	// verify
-	assert.NoError(t, err)
-	assert.True(t, len(resp) > 0)
+	test.Ok(t, err)
+	test.Assert(t, len(resp) > 0, "Received empty response")
 }
 
 func TestWeather(t *testing.T) {
@@ -49,8 +49,8 @@ func TestWeather(t *testing.T) {
 	// action
 	data, err := q.Weather()
 	// verify
-	assert.NoError(t, err)
-	assert.Equal(t, "Berlin", data.Name)
+	test.Ok(t, err)
+	test.Equals(t, "Berlin", data.Name)
 }
 
 func TestDailyForecast(t *testing.T) {
@@ -59,6 +59,6 @@ func TestDailyForecast(t *testing.T) {
 	// action
 	data, err := q.DailyForecast5()
 	// verify
-	assert.NoError(t, err)
-	assert.Equal(t, "Berlin", data.City.Name)
+	test.Ok(t, err)
+	test.Equals(t, "Berlin", data.City.Name)
 }

@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/EricNeid/openweatherapi"
+	"github.com/EricNeid/openweather"
 )
 
 func main() {
@@ -17,7 +17,7 @@ func main() {
 		return
 	}
 
-	query := openweatherapi.NewQueryForCity(*keyPtr, *cityPtr, "metric")
+	query := openweather.NewQueryForCity(*keyPtr, *cityPtr, "metric")
 	weather, err := query.WeatherRaw()
 
 	if err != nil {

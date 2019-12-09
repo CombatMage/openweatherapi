@@ -1,4 +1,4 @@
-package openweatherapi
+package openweather
 
 // CurrentWeather represents unmarshalled data from openweathermap
 // for the current weather API (http://openweathermap.org/current).
